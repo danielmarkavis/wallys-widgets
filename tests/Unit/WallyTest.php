@@ -2,25 +2,27 @@
 
 namespace Tests\Unit;
 
+use App\Repositories\WidgetRepository;
+use Database\Seeders\WidgetSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Services\WidgetService;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class WallyTest extends TestCase
 {
+    use RefreshDatabase;
+
     private WidgetService $widgetService;
-    private array $packs = [
-        5000,
-        2000,
-        1000,
-        500,
-        250
-    ];
+    public array $packs = [];
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->widgetService = new WidgetService();
+        $this->seed(WidgetSeeder::class);
+        $this->widgetService = app(WidgetService::class);
+        $repository = app(WidgetRepository::class);
+        $this->packs = collect($repository->getQuery()->orderby('size', 'desc')->get()->toArray())->pluck('size')->toArray();
     }
 
     /**
@@ -30,9 +32,9 @@ class WallyTest extends TestCase
      */
     public function test_packs_for_1(): void
     {
-        $this->widgetService->setPacks($this->packs);
-
-        $order = $this->widgetService->execute( 1 );
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 1 );
 
         $expectedResult = [
             '250' => 1
@@ -48,9 +50,9 @@ class WallyTest extends TestCase
      */
     public function test_packs_for_250(): void
     {
-        $this->widgetService->setPacks($this->packs);
-
-        $order = $this->widgetService->execute( 250 );
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 250 );
 
         $expectedResult = [
             '250' => 1
@@ -66,9 +68,9 @@ class WallyTest extends TestCase
      */
     public function test_packs_for_251(): void
     {
-        $this->widgetService->setPacks($this->packs);
-
-        $order = $this->widgetService->execute( 251 );
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 251 );
 
         $expectedResult = [
             '500' => 1
@@ -84,9 +86,9 @@ class WallyTest extends TestCase
      */
     public function test_packs_for_501(): void
     {
-        $this->widgetService->setPacks($this->packs);
-
-        $order = $this->widgetService->execute( 501 );
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 501 );
 
         $expectedResult = [
             '500' => 1,
@@ -103,9 +105,9 @@ class WallyTest extends TestCase
      */
     public function test_packs_for_12001(): void
     {
-        $this->widgetService->setPacks($this->packs);
-
-        $order = $this->widgetService->execute( 12001 );
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 12001 );
 
         $expectedResult = [
             '5000' => 2,
@@ -123,9 +125,9 @@ class WallyTest extends TestCase
      */
     public function test_packs_for_14800(): void
     {
-        $this->widgetService->setPacks($this->packs);
-
-        $order = $this->widgetService->execute( 14800 );
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 14800 );
 
         $expectedResult = [
             '5000' => 2,

@@ -158,9 +158,11 @@ class WidgetService implements WidgetServiceInterface
         return $this->order;
     }
 
-    public function setPacks(array $packs): void
+    public function setPacks(array $packs): static
     {
         $this->packs = $packs;
+
+        return $this;
     }
 
 }
