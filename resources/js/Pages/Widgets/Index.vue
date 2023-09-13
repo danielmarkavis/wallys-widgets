@@ -9,7 +9,7 @@
                     </div>
                 </template>
             </div>
-            <hr class="py-2"/>
+            <hr class="my-2"/>
             <h3>Tests</h3>
             <div class="flex flex-row">
                 <button @click="form.quantity = 1" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
@@ -21,22 +21,22 @@
                 <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
                     251
                 </button>
-                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                <button @click="form.quantity = 501" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
                     501
                 </button>
-                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                <button @click="form.quantity = 12001" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
                     12001
                 </button>
-                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                <button @click="form.quantity = 14800" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
                     14800
                 </button>
-
                 <button @click="form.quantity = Math.floor(Math.random() * 25000)" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
                     ????
                 </button>
             </div>
 
             <hr class="my-12">
+
             <form @submit.prevent="handleSubmit" method="post">
                 <FormGroup
                     label="Quantity"
@@ -51,13 +51,18 @@
                 </div>
             </form>
 
-            <div class="flex flex-row mt-5">
-                <template v-for="(item, index) in order">
-                    <div class="bg-gray-200 px-2 py-1 rounded-lg mr-1">
-                        {{ index }}: {{ item }}
+            <template v-if="order">
+                <div class="mt-5">
+                    <h3>Order:</h3>
+                    <div class="flex flex-row mt-2">
+                        <template v-for="(item, index) in order">
+                            <div class="bg-gray-200 px-2 py-1 rounded-lg mr-1">
+                                {{ index }}: {{ item }}
+                            </div>
+                        </template>
                     </div>
-                </template>
-            </div>
+                </div>
+            </template>
         </div>
     </GuestLayout>
 </template>
@@ -67,7 +72,6 @@ import {useForm} from "@inertiajs/vue3";
 import {ref} from "vue";
 import FormGroup from "@/Components/Form/FormGroup.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-
 
 interface Widget {
     id: string,
@@ -86,7 +90,7 @@ const form = useForm<{
     quantity: 251
 });
 
-const order = ref([]);
+const order = ref(null);
 
 const handleSubmit = (): void => {
     form.post(route('widgets.index'), {
