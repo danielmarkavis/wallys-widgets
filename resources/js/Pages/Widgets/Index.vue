@@ -1,12 +1,39 @@
 <template>
     <GuestLayout title="Packing">
         <div class="max-w-xl mx-auto">
+            <h3>Packs</h3>
             <div class="flex flex-row">
                 <template v-for="widget in widgets">
                     <div class="bg-gray-200 px-2 py-1 rounded-lg mr-1">
                         {{ widget.size }}
                     </div>
                 </template>
+            </div>
+            <hr class="py-2"/>
+            <h3>Tests</h3>
+            <div class="flex flex-row">
+                <button @click="form.quantity = 1" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    1
+                </button>
+                <button @click="form.quantity = 250" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    250
+                </button>
+                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    251
+                </button>
+                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    501
+                </button>
+                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    12001
+                </button>
+                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    14800
+                </button>
+
+                <button @click="form.quantity = Math.floor(Math.random() * 25000)" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
+                    ????
+                </button>
             </div>
 
             <hr class="my-12">
@@ -62,33 +89,9 @@ const form = useForm<{
 const order = ref([]);
 
 const handleSubmit = (): void => {
-    //  const lastPack = props.widgets[props.widgets.length-1].size;
-    //  let packIndex = 0;
-    //  let quantity = form.quantity;
-    //  const packs = props.widgets;
-    //  let rollout = 1000;
-    //  while(quantity > 0) {
-    //      let packSize = packs[packIndex].size;
-    //      console.log(packSize);
-    //      if ((quantity - packSize) >= 0 || (quantity - lastPack <= 0 && packSize === lastPack)) {
-    //          quantity = quantity - packSize;
-    //          console.log(order.value[packSize]['quantity'])
-    //          if (order.value[packSize]['quantity']) {
-    //              order.value[packSize]['quantity']++;
-    //          } else
-    //              order.value[packSize]['quantity'] = 1;
-    //      } else {
-    //          packIndex++;
-    //      }
-    //      rollout -= 1;
-    //      if (rollout <= 0) break;
-    // }
-    //  console.log(order.value);
-
     form.post(route('widgets.index'), {
         onSuccess: (res) => {
             order.value = res.props.order;
-            // console.log(res.props.order);
         },
     });
 }
