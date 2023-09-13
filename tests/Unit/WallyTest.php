@@ -116,4 +116,23 @@ class WallyTest extends TestCase
         $this->assertEquals($expectedResult, $order);
     }
 
+    /**
+     * A basic test example.
+     *
+     * @throws \Exception
+     */
+    public function test_packs_for_14800(): void
+    {
+        $this->widgetService->setPacks($this->packs);
+
+        $order = $this->widgetService->execute( 14800 );
+
+        $expectedResult = [
+            '5000' => 2,
+            '2000' => 2,
+            '1000' => 1
+        ];
+
+        $this->assertEquals($expectedResult, $order);
+    }
 }

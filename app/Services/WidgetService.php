@@ -6,19 +6,20 @@ class WidgetService implements WidgetServiceInterface
 {
 
     public array $packs = [];
+
     public array $order = [];
 
-    private function addPack( $packSize, $boxes ) {
-        if (isset($order[$packSize])) {
-            $order[$packSize]++;
-        } else {
-            $order[$packSize] = 1;
-        }
-    }
-
+    /**
+     * Will pack up quantity into order
+     *
+     * @param $packSizes
+     * @param $quantity
+     *
+     * @return array
+     */
     function packing($packSizes, $quantity): array
     {
-        //insure packs are in descending order
+        // ensure packs are in descending order
         rsort($packSizes);
         $lastPack = $packSizes[count($this->packs) - 1];
 
@@ -41,7 +42,7 @@ class WidgetService implements WidgetServiceInterface
             }
 
             if ($quantity > 0 && $packSize === $lastPack && $quantity - $lastPack <= 0) {
-                $quantity = $quantity - $packSize;
+                $quantity -= $packSize;
                 if (isset($order[$packSize])) {
                     $order[$packSize]++;
                 } else {
@@ -55,33 +56,66 @@ class WidgetService implements WidgetServiceInterface
         return $order;
     }
 
-    function optimizePacks($order): array
+    /**
+     * @param $size
+     * @param $boxes
+     *
+     * @return void
+     */
+    private function removePacks($size, $boxes): void
     {
-        foreach( $order as $size => $boxes ) {
-            if ($boxes > 1) {
+        $this->order[$size] = $this->order[$size] - $boxes; // Remove old boxes
+        if (floor($this->order[$size]) <= 0) { // remove old boxes index
+            unset($this->order[$size]);
+        }
+    }
+
+    /**
+     * @param $newSize
+     * @param $newBoxes
+     *
+     * @return void
+     */
+    private function updatePacks($newSize, $newBoxes): void
+    {
+        if (isset($this->order[$newSize])) { // Add new boxes to order.
+            $this->order[$newSize] = $this->order[$newSize] + $newBoxes; // Add to line
+        } else {
+            $this->order[$newSize] = $newBoxes; // Set line
+        }
+    }
+
+    /**
+     * Optimise the order with less packing.
+     */
+    function optimizePacking(): bool
+    {
+        $changed = false;
+        foreach ($this->order as $size => $boxes) {
+            if ($boxes > 1) { // no point on anything with 1 pack, as that's the smallest pack quantity
                 // Calc new packs
                 // Remove old packs from order.
                 // Add new packs to order.
 
-                $newPacks = $this->packing($this->packs, $size * $boxes);
+                $newPacks = $this->packing($this->packs, $size * $boxes); // Just reuse the packing function.
 
-                foreach($newPacks as $newSize => $newBoxes) {
-                    $order[$size] = $order[$size] - $boxes; // Remove old boxes
-                    if (floor($order[$size]) <= 0) { // remove old boxes index
-                        unset($order[$size]);
+                foreach ($newPacks as $newSize => $newBoxes) { // Adjust the order, if the order is optimised
+                    if ($size === $newSize && $boxes === $newBoxes) { // Ignore any rows, that are the same as the order.
+                        continue;
                     }
 
-                    if (isset($order[$newSize])) { // Add new boxes to order.
-                        $order[$newSize] = $order[$newSize] + $newBoxes;
-                    } else {
-                        $order[$newSize] = $newBoxes;
-                    }
+                    $changed = true; // When a change has occurred, the return should trigger another pass.
+
+                    $this->removePacks($size, $boxes);
+
+                    $this->updatePacks($newSize, $newBoxes);
                 }
             }
         }
 
-        return $order;
+        return $changed;
     }
+
     /**
      * @throws \Exception
      */
@@ -91,9 +125,13 @@ class WidgetService implements WidgetServiceInterface
             throw new \Exception('Packs not assigned');
         }
 
-        $order = $this->packing($this->packs, $quantity);
-        $order = $this->optimizePacks($order);
+        $this->order = $this->packing($this->packs, $quantity);
 
+        $loop = 0;
+        do {
+            $changed = $this->optimizePacking();
+            $loop++;
+        } while ($changed || $loop >= 100);
 
         //        251 Idea - Between two pack sizes, set to the largest one. Issue: when on 500 it would set to 1000, which is not optimal (500+250)
         //        foreach ($this->packs as $index => $pack) {
@@ -119,7 +157,7 @@ class WidgetService implements WidgetServiceInterface
         //            }
         //        }
 
-        return $order;
+        return $this->order;
     }
 
     public function setPacks(array $packs): void
