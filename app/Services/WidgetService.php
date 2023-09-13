@@ -88,7 +88,7 @@ class WidgetService implements WidgetServiceInterface
     /**
      * Optimise the order with less packing.
      */
-    function optimizePacking(): bool
+    function optimizePacking(): void
     {
         $changed = false;
         foreach ($this->order as $size => $boxes) {
@@ -104,7 +104,7 @@ class WidgetService implements WidgetServiceInterface
                         continue;
                     }
 
-                    $changed = true; // When a change has occurred, the return should trigger another pass.
+                    $changed = true; // When a change has occurred, it should trigger another pass.
 
                     $this->removePacks($size, $boxes);
 
@@ -113,7 +113,9 @@ class WidgetService implements WidgetServiceInterface
             }
         }
 
-        return $changed;
+        if ($changed) {
+            $this->optimizePacking(); // Recursive // Recursive // Recursive // Recursive
+        }
     }
 
     /**
@@ -127,11 +129,7 @@ class WidgetService implements WidgetServiceInterface
 
         $this->order = $this->packing($this->packs, $quantity);
 
-        $loop = 0;
-        do {
-            $changed = $this->optimizePacking();
-            $loop++;
-        } while ($changed || $loop >= 100);
+        $this->optimizePacking();
 
         //        251 Idea - Between two pack sizes, set to the largest one. Issue: when on 500 it would set to 1000, which is not optimal (500+250)
         //        foreach ($this->packs as $index => $pack) {
