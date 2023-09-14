@@ -91,10 +91,6 @@ const scrolling = ref(false)
 
 const page = usePage();
 
-const hasUser = computed(() => {
-  return page.props?.auth.user ?? null
-})
-
 interface NavItem {
   label: string,
   route: string,

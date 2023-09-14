@@ -10,9 +10,9 @@
             v-if="$slots.icon || processing"
             :class="[iconClass, $slots.default ? (compact?'mr-2':'mr-3') : '']"
         >
-<!--            <ICircle-->
-<!--                v-if="processing"-->
-<!--            />-->
+            <ICircle
+                v-if="processing"
+            />
 
             <slot
                 v-if="!processing"
@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import {Link} from '@inertiajs/vue3';
 import {computed} from "vue";
-// import ICircle from "@/Components/Icons/ICircle.vue";
+import ICircle from "@/Components/Icons/ICircle.vue";
 
 type BaseButtonType = 'a' | 'button' | 'link';
 type ButtonColors = 'blue' | 'gray' | 'green' | 'red' | 'yellow';
