@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Services\WidgetService;
 use Tests\TestCase;
 
-class WallyTest extends TestCase
+class PackingTest extends TestCase
 {
     use RefreshDatabase;
 
