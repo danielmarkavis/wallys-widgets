@@ -75,5 +75,4 @@ const {editing, disabled, submit} = CreateEdit(props, form, {
     store_route: 'widgets.store',
     update_route: 'widgets.update'
 })
-
 </script>

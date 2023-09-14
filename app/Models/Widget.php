@@ -10,6 +10,6 @@ class Widget extends Model
     use HasFactory;
 
     protected $fillable = [
-        'quantity'
+        'size'
     ];
 }

@@ -18,10 +18,6 @@ class MenuService
     {
         return [
             [
-                'label' => 'Home',
-                'route' => 'packing.index'
-            ],
-            [
                 'label' => 'Packing',
                 'route' => 'packing.index'
             ],

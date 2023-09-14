@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    return redirect()->route('widgets.index');
+    return redirect()->route('packing.index');
 });
 
 Route::middleware('web')->group(function () {
@@ -18,9 +18,6 @@ Route::middleware('web')->group(function () {
 
     Route::resource('packing', PackingController::class)
         ->only(['index','store']);
-
-    Route::resource('orders', OrderController::class)
-        ->parameters(['orders' => 'order'])->only(['index','show']);
 });
 
 Route::get('/dashboard', function () {

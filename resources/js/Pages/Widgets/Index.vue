@@ -61,11 +61,4 @@ const form = useForm<{
 
 const order = ref(null);
 
-const handleSubmit = (): void => {
-    form.post(route('widgets.index'), {
-        onSuccess: (res) => {
-            order.value = res.props.order;
-        },
-    });
-}
 </script>

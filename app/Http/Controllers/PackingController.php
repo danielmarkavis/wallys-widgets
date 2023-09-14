@@ -39,10 +39,16 @@ class PackingController extends Controller
         $packs = collect($repository->getQuery()->orderby('size', 'desc')->get())->pluck('size')->toArray();
 
         $order = $widgetService->setPacks($packs)->execute($quantity, $data['optimize']);
+        $actualQuantity = 0;
+
+        foreach($order as $index => $item) {
+            $actualQuantity += floor($index * $item);
+        }
 
         return inertia('Packing/Index')->with([
             'order'   => $order,
             'widgets' => $this->widgets,
+            'actualQuantity' => $actualQuantity
         ]);
     }
 

@@ -61,17 +61,26 @@
                     </label>
                 </div>
                 <div class="flex flex-row pt-5">
-                    <button type="submit" class="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-12 py-2.5 ml-2 mb-2 focus:outline-none">Purchase</button>
+                    <BaseButton
+                        tag="button"
+                        type="submit"
+                        color="green"
+                    >Purchase</BaseButton>
                 </div>
             </form>
 
             <template v-if="order">
                 <div class="mt-5">
-                    <h3>Order:</h3>
+                    <h3 class="text-xl">Order:</h3>
+                    <div class="text-gray-700 mb-5">
+                        Total packed widgets: <span class="bg-blue-300 rounded-md px-3 py-1">{{actualQuantity}}</span>
+                    </div>
+                    <h3 class="text-xl">Packs:</h3>
                     <div class="flex flex-row mt-2">
                         <template v-for="(item, index) in order">
                             <div class="rounded-lg mr-5 flex flex-row items-center">
-                                <div class="bg-gray-300 rounded-l-xl px-3 py-1">{{ index }}</div><div class="bg-blue-500 text-white px-3 py-1 rounded-r-full">x{{ item }}</div>
+                                <div class="bg-gray-300 rounded-l-md px-3 py-1">{{ index }}</div>
+                                <div class="bg-blue-500 text-white px-3 py-1 rounded-r-md">x{{ item }}</div>
                             </div>
                         </template>
                     </div>
@@ -83,18 +92,25 @@
 
 <script setup lang="ts">
 import {useForm} from "@inertiajs/vue3";
-import {ref} from "vue";
 import FormGroup from "@/Components/Form/FormGroup.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import BaseButton from "@/Components/Buttons/BaseButton.vue";
 
 interface Widget {
     id: string,
     size: string
 }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
+    actualQuantity?: number|null
+    order?: Array<object>
     widgets?: Array<Widget>
-}>();
+}>(),
+    {
+        actualQuantity: null,
+        order: null
+    }
+)
 
 const form = useForm<{
     redirect: boolean,
@@ -106,13 +122,11 @@ const form = useForm<{
     optimize: true
 });
 
-const order = ref(null);
+// const order = ref(null);
 
 const handleSubmit = (): void => {
     form.post(route('packing.store'), {
-        onSuccess: (res) => {
-            order.value = res.props.order;
-        },
+        onSuccess: () => {},
     });
 }
 </script>

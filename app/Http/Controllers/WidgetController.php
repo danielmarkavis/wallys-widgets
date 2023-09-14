@@ -47,11 +47,9 @@ class WidgetController extends Controller
     {
         $data = $request->validated();
 
-        $widget = new Widget();
-        $widget->size = $data['size'];
-        $widget->save();
+        Widget::create($data);
 
-        return redirect()->route('widgets.index')->with(['message' => 'Created widget!']);
+        return redirect()->route('widgets.index')->with(['message' => 'Created pack!']);
     }
 
     /**
@@ -71,10 +69,9 @@ class WidgetController extends Controller
     public function update(StoreUpdateWidgetRequest $request, Widget $widget): RedirectResponse
     {
         $data = $request->validated();
-        $widget->size = $data['size'];
-        $widget->save();
+        $widget->update($data);
 
-        return redirect()->route('widgets.index')->with('message', 'Updated record');
+        return redirect()->route('widgets.index')->with('message', 'Updated pack size');
     }
 
     public function destroy(Widget $widget): RedirectResponse
@@ -83,7 +80,7 @@ class WidgetController extends Controller
 
         return redirect()
             ->route('widgets.index')
-            ->with('message', 'Record deleted!');
+            ->with('message', 'Pack deleted!');
     }
 
 }
