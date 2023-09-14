@@ -11,6 +11,7 @@
                                 required
                                 single-column
                             >
+                                {{form.size}}
                                 <FormTextInput
                                     id="size"
                                     v-model="form.size"
@@ -30,7 +31,7 @@
                         tag="button"
                         type="button"
                         v-if="editing"
-                        :disabled="form.isDirty"
+                        :disabled="disabled"
                         @click="router.delete(route('widgets.destroy', record), { preserveState: false })"
                     >
                         <slot>Delete</slot>
@@ -39,7 +40,7 @@
                     <BaseButton
                         color="blue"
                         tag="button"
-                        :disabled="!form.isDirty"
+                        :disabled="disabled"
                         :processing="form.processing"
                         type="submit"
                     >
@@ -68,7 +69,7 @@ const props = defineProps<{
 const form = useForm<{
     size: number,
 }>({
-    size: props?.record?.size ?? 0
+    size: props?.record?.size ?? ""
 });
 
 const {editing, disabled, submit} = CreateEdit(props, form, {
