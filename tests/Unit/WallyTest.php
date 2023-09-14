@@ -84,6 +84,24 @@ class WallyTest extends TestCase
      *
      * @throws \Exception
      */
+    public function test_packs_for_251_no_optimizing(): void
+    {
+        $order = $this->widgetService
+            ->setPacks($this->packs)
+            ->execute( 251, false);
+
+        $expectedResult = [
+            '250' => 2
+        ];
+
+        $this->assertEquals($expectedResult, $order);
+    }
+
+    /**
+     * A basic test example.
+     *
+     * @throws \Exception
+     */
     public function test_packs_for_501(): void
     {
         $order = $this->widgetService

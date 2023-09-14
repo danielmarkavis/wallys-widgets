@@ -46,6 +46,20 @@
                 >
                     <input v-model="form.quantity" type="text" id="quantity" name="quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                 </FormGroup>
+
+
+                <div class="flex flex-row items-center">
+                    <input
+                        v-model="form.optimize"
+                        type="checkbox"
+                        class="rounded bg-white border-gray-300 text-gray-700 shadow focus:ring-0 mr-3"
+                        id="form_optimize"
+                        name="form_optimize"
+                    >
+                    <label for="form_optimize">
+                        Optimize
+                    </label>
+                </div>
                 <div class="flex flex-row pt-5">
                     <button type="submit" class="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-12 py-2.5 ml-2 mb-2 focus:outline-none">Purchase</button>
                 </div>
@@ -85,9 +99,11 @@ const props = defineProps<{
 const form = useForm<{
     redirect: boolean,
     quantity: string,
+    optimize: bool
 }>({
     redirect: false,
-    quantity: 251
+    quantity: 251,
+    optimize: true
 });
 
 const order = ref(null);

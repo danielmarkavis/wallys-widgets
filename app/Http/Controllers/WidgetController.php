@@ -36,7 +36,7 @@ class WidgetController extends Controller
 
         $widgetService->setPacks($packs->toArray());
 
-        $order = $widgetService->execute($quantity);
+        $order = $widgetService->execute($quantity, $data['optimize']);
 
         $widgets = $repository->getQuery()->orderby('size', 'desc')->get();
 

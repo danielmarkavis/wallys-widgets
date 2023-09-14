@@ -23,6 +23,7 @@ class StoreWidgetRequest extends FormRequest
     {
         return [
             'quantity' => 'required|int|min:1',
+            'optimize' => 'bool',
         ];
     }
 }

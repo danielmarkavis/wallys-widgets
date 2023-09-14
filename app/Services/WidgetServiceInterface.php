@@ -6,5 +6,5 @@ use App\Repositories\ProviderInterface;
 
 interface WidgetServiceInterface
 {
-    public function execute(int $quantity): array;
+    public function execute(int $quantity, bool $optimize = true): array;
 }

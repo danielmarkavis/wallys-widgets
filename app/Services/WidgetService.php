@@ -12,15 +12,17 @@ class WidgetService implements WidgetServiceInterface
     /**
      * @throws \Exception
      */
-    public function execute(int $quantity): array
+    public function execute(int $quantity, bool $optimize = true): array
     {
         if (!count($this->packs)) {
-            throw new \Exception(__METHOD__.':: Packs not assigned');
+            throw new \Exception(__METHOD__.':: Packs are not assigned');
         }
 
         $this->order = $this->packing($this->packs, $quantity);
 
-        $this->optimizePacking();
+        if ($optimize) {
+            $this->optimizePacking();
+        }
 
         //        251 Idea - Between two pack sizes, set to the largest one. Issue: when on 500 it would set to 1000, which is not optimal (500+250)
         //        foreach ($this->packs as $index => $pack) {
