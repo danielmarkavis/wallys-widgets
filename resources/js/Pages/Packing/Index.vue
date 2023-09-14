@@ -11,28 +11,49 @@
             </div>
             <hr class="my-2"/>
             <h3>Tests</h3>
-            <div class="flex flex-row">
-                <button @click="form.quantity = 1" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    1
-                </button>
-                <button @click="form.quantity = 250" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    250
-                </button>
-                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    251
-                </button>
-                <button @click="form.quantity = 501" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    501
-                </button>
-                <button @click="form.quantity = 12001" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    12001
-                </button>
-                <button @click="form.quantity = 14800" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    14800
-                </button>
-                <button @click="form.quantity = Math.floor(Math.random() * 25000)" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    ????
-                </button>
+            <div class="flex flex-row gap-2">
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = 1"
+                >1</BaseButton>
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = 250"
+                >250</BaseButton>
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = 251"
+                >251</BaseButton>
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = 501"
+                >501</BaseButton>
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = 12001"
+                >12001</BaseButton>
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = 14800"
+                >14800</BaseButton>
+                <BaseButton
+                    tag="button"
+                    type="button"
+                    color="green"
+                    @click="form.quantity = Math.floor(Math.random() * 25000)"
+                >?????</BaseButton>
             </div>
 
             <hr class="my-12">
