@@ -14,8 +14,8 @@
 
 ## Notes
 Uses both repositories and services.
-
-There are tests 
+There is a frontend.
+There are tests.
 
 ### PackingTest
 
