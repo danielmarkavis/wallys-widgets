@@ -21,7 +21,7 @@ class WidgetController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function index(): Response|ResponseFactory
     {
@@ -31,7 +31,7 @@ class WidgetController extends Controller
     }
 
     /**
-     * @return \Inertia\Response|\Inertia\ResponseFactory|\Illuminate\Http\RedirectResponse
+     * @return Response|ResponseFactory|RedirectResponse
      */
     public function create(): Response|ResponseFactory|RedirectResponse
     {
@@ -41,7 +41,9 @@ class WidgetController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * @param \App\Http\Requests\StoreUpdateWidgetRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(StoreUpdateWidgetRequest $request): RedirectResponse
     {
@@ -49,7 +51,9 @@ class WidgetController extends Controller
 
         Widget::create($data);
 
-        return redirect()->route('widgets.index')->with(['message' => 'Created pack!']);
+        return redirect()
+            ->route('widgets.index')
+            ->with(['message' => 'Created pack!']);
     }
 
     /**
@@ -71,7 +75,9 @@ class WidgetController extends Controller
         $data = $request->validated();
         $widget->update($data);
 
-        return redirect()->route('widgets.index')->with('message', 'Updated pack size');
+        return redirect()
+            ->route('widgets.index')
+            ->with('message', 'Updated pack size');
     }
 
     public function destroy(Widget $widget): RedirectResponse

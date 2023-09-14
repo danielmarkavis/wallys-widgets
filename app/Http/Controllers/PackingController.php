@@ -20,35 +20,46 @@ class PackingController extends Controller
 
     /**
      * Display a listing of the resource.
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
     public function index(): Response|ResponseFactory
     {
-        return inertia('Packing/Index')->with([
-            'widgets' => $this->widgets,
-        ]);
+        return inertia('Packing/Index')
+            ->with([
+                'widgets' => $this->widgets,
+            ]);
     }
 
     /**
      * This would actually store the order in the DB, but instead I am just returning it in an inertia response.
+     *
+     * @param \App\Http\Requests\PackingWidgetRequest $request
+     * @param \App\Services\WidgetServiceInterface    $widgetService
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function store(PackingWidgetRequest $request, WidgetServiceInterface $widgetService, WidgetRepository $repository): Response|ResponseFactory
+    public function store(PackingWidgetRequest $request, WidgetServiceInterface $widgetService): Response|ResponseFactory
     {
         $data = $request->validated();
 
         $quantity = $data['quantity'];
 
-        $order = $widgetService->setPacks($this->widgets)->execute($quantity, $data['optimize']);
+        $order = $widgetService
+            ->setPacks($this->widgets)
+            ->execute($quantity, $data['optimize']);
 
         $actualQuantity = 0; // This section could be included in the execute command.
-        foreach($order as $index => $item) {
+        foreach ($order as $index => $item) {
             $actualQuantity += floor($index * $item);
         }
 
-        return inertia('Packing/Index')->with([
-            'order'   => $order,
-            'widgets' => $this->widgets,
-            'actualQuantity' => $actualQuantity
-        ]);
+        return inertia('Packing/Index')
+            ->with([
+                'order'          => $order,
+                'widgets'        => $this->widgets,
+                'actualQuantity' => $actualQuantity,
+            ]);
     }
 
 }
