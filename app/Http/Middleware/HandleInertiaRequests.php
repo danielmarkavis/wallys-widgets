@@ -41,6 +41,9 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'nav' => app(MenuService::class)->generate(),
+            'flash' => [
+                'message' => session('message')
+            ]
         ];
     }
 }

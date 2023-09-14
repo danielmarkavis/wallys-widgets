@@ -1,6 +1,16 @@
 <template>
     <GuestLayout title="Packing">
         <div class="container mx-auto">
+            <div
+                v-if="$page.props.flash.message"
+                class="p-4 mb-4 text-sm text-blue-700 bg-blue-100 rounded-lg"
+                role="alert"
+            >
+                <span class="font-medium">
+                    {{ $page.props.flash.message }}
+                </span>
+            </div>
+
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <template v-for="(widget, index) in widgets" :key="index">
                     <a :href="route('widgets.edit', widget.id)">

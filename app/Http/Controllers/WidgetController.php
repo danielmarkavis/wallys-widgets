@@ -51,7 +51,7 @@ class WidgetController extends Controller
         $widget->size = $data['size'];
         $widget->save();
 
-        return redirect()->route('widgets.index')->with(['message' => 'Success']);
+        return redirect()->route('widgets.index')->with(['message' => 'Created widget!']);
     }
 
     /**
@@ -74,7 +74,7 @@ class WidgetController extends Controller
         $widget->size = $data['size'];
         $widget->save();
 
-        return redirect()->route('widgets.index')->with('success', 'Updated record');
+        return redirect()->route('widgets.index')->with('message', 'Updated record');
     }
 
     public function destroy(Widget $widget): RedirectResponse
@@ -83,7 +83,7 @@ class WidgetController extends Controller
 
         return redirect()
             ->route('widgets.index')
-            ->with('success', 'Record deleted!');
+            ->with('message', 'Record deleted!');
     }
 
 }
