@@ -26,6 +26,24 @@ class WidgetTest extends TestCase
     /**
      * @throws \Exception
      */
+    public function test_pack_updates(): void
+    {
+        $widget = Widget::factory()->create();
+
+        $this->assertDatabaseHas('widgets', [
+            'size' => 1,
+        ]);
+
+        $widget->update(['size'=> 4001]);
+
+        $this->assertDatabaseHas('widgets', [
+            'size' => 4001,
+        ]);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function test_pack_delete(): void
     {
         $widget = Widget::factory()->create();
@@ -61,5 +79,4 @@ class WidgetTest extends TestCase
 
         $this->assertDatabaseCount('widgets', 2);
     }
-
 }
