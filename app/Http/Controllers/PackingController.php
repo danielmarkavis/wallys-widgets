@@ -15,7 +15,7 @@ class PackingController extends Controller
 
     public function __construct(WidgetRepository $repository)
     {
-        $this->widgets = collect($repository->getQuery()->orderby('size', 'desc')->get())->toArray();
+        $this->widgets = collect($repository->getQuery()->orderby('size', 'desc')->get())->pluck('size')->toArray();
     }
 
     /**
@@ -29,18 +29,17 @@ class PackingController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * This would actually store the order in the DB, but instead I am just returning it in an inertia response.
      */
     public function store(PackingWidgetRequest $request, WidgetServiceInterface $widgetService, WidgetRepository $repository): Response|ResponseFactory
     {
         $data = $request->validated();
 
         $quantity = $data['quantity'];
-        $packs = collect($repository->getQuery()->orderby('size', 'desc')->get())->pluck('size')->toArray();
 
-        $order = $widgetService->setPacks($packs)->execute($quantity, $data['optimize']);
-        $actualQuantity = 0;
+        $order = $widgetService->setPacks($this->widgets)->execute($quantity, $data['optimize']);
 
+        $actualQuantity = 0; // This section could be included in the execute command.
         foreach($order as $index => $item) {
             $actualQuantity += floor($index * $item);
         }

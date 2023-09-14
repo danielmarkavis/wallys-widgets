@@ -5,7 +5,7 @@
             <div class="flex flex-row">
                 <template v-for="widget in widgets">
                     <div class="bg-gray-200 px-2 py-1 rounded-lg mr-1">
-                        {{ widget.size }}
+                        {{ widget }}
                     </div>
                 </template>
             </div>
@@ -124,7 +124,7 @@ interface Widget {
 
 const props = withDefaults(defineProps<{
     actualQuantity?: number|null
-    order?: Array<object>
+    order?: object
     widgets?: Array<Widget>
 }>(),
     {
@@ -142,8 +142,6 @@ const form = useForm<{
     quantity: 251,
     optimize: true
 });
-
-// const order = ref(null);
 
 const handleSubmit = (): void => {
     form.post(route('packing.store'), {
