@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('widgets', function (Blueprint $table) {
             $table->id();
-            $table->integer('size');
+            $table->integer('size')->unique();
             $table->timestamps();
         });
     }

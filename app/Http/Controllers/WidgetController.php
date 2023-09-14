@@ -2,44 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreWidgetRequest;
-use App\Http\Requests\UpdateWidgetRequest;
+use App\Http\Requests\StoreUpdateWidgetRequest;
 use App\Models\Widget;
 use App\Repositories\WidgetRepository;
-use App\Services\WidgetServiceInterface;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Collection;
 use Inertia\Response;
 use Inertia\ResponseFactory;
 
 class WidgetController extends Controller
 {
+
+    public Collection $widgets;
+
+    public function __construct(WidgetRepository $repository)
+    {
+        $this->widgets = $repository->getQuery()->orderby('size', 'desc')->get();
+    }
+
     /**
      * Display a listing of the resource.
      */
-    public function index(WidgetRepository $repository): Response|ResponseFactory
+    public function index(): Response|ResponseFactory
     {
-        $widgets = $repository->getQuery()->orderby('size', 'desc')->get();
+        return inertia('Widgets/Index')->with([
+            'widgets' => $this->widgets,
+        ]);
+    }
 
-        return inertia('Widgets/Index')->with(compact('widgets'));
+    /**
+     * @return \Inertia\Response|\Inertia\ResponseFactory|\Illuminate\Http\RedirectResponse
+     */
+    public function create(): Response|ResponseFactory|RedirectResponse
+    {
+        return inertia(
+            'Widgets/CreateEdit'
+        );
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreWidgetRequest $request, WidgetServiceInterface $widgetService, WidgetRepository $repository): Response|ResponseFactory
+    public function store(StoreUpdateWidgetRequest $request): RedirectResponse
     {
         $data = $request->validated();
 
-        $quantity = $data['quantity'];
-        $packs = collect($repository->getQuery()->orderby('size', 'desc')->get()->toArray())->pluck('size');
+        $widget = new Widget();
+        $widget->size = $data['size'];
+        $widget->save();
 
-        $widgetService->setPacks($packs->toArray());
-
-        $order = $widgetService->execute($quantity, $data['optimize']);
-
-        $widgets = $repository->getQuery()->orderby('size', 'desc')->get();
-
-        return inertia('Widgets/Index')->with(compact('order','widgets'));
+        return redirect()->route('widgets.index')->with(['message' => 'Success']);
     }
+
+    /**
+     * @param \App\Models\Widget $widget
+     *
+     * @return \Inertia\Response|\Inertia\ResponseFactory|\Illuminate\Http\RedirectResponse
+     */
+    public function edit(Widget $widget): Response|ResponseFactory|RedirectResponse
+    {
+        return inertia(
+            'Widgets/CreateEdit', [
+                'record' => $widget,
+            ]
+        );
+    }
+
+    public function update(StoreUpdateWidgetRequest $request, Widget $widget): RedirectResponse
+    {
+        $data = $request->validated();
+        $widget->size = $data['size'];
+        $widget->save();
+
+        return redirect()->route('widgets.index')->with('success', 'Updated record');
+    }
+
+    public function destroy(Widget $widget): RedirectResponse
+    {
+        $widget->delete();
+
+        return redirect()
+            ->route('widgets.index')
+            ->with('success', 'Record deleted!');
+    }
+
 }

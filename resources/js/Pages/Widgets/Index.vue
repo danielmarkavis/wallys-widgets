@@ -1,82 +1,25 @@
 <template>
     <GuestLayout title="Packing">
-        <div class="max-w-xl mx-auto">
-            <h3>Packs</h3>
-            <div class="flex flex-row">
-                <template v-for="widget in widgets">
-                    <div class="bg-gray-200 px-2 py-1 rounded-lg mr-1">
-                        {{ widget.size }}
-                    </div>
+        <div class="container mx-auto">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template v-for="(widget, index) in widgets" :key="index">
+                    <a :href="route('widgets.edit', widget.id)">
+                        <div class="bg-gray-200 hover:bg-gray-400 flex flex-col py-5 rounded-md">
+                            <div class="text-center">
+                                <h5 class="text-lg font-bold tracking-tight text-gray-900 uppercase">{{ widget.size }}</h5>
+                            </div>
+                        </div>
+                    </a>
                 </template>
             </div>
-            <hr class="my-2"/>
-            <h3>Tests</h3>
-            <div class="flex flex-row">
-                <button @click="form.quantity = 1" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    1
-                </button>
-                <button @click="form.quantity = 250" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    250
-                </button>
-                <button @click="form.quantity = 251" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    251
-                </button>
-                <button @click="form.quantity = 501" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    501
-                </button>
-                <button @click="form.quantity = 12001" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    12001
-                </button>
-                <button @click="form.quantity = 14800" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    14800
-                </button>
-                <button @click="form.quantity = Math.floor(Math.random() * 25000)" class="bg-green-200 px-2 py-1 rounded-lg mr-1">
-                    ????
-                </button>
+            <div class="mt-5">
+                <BaseButton
+                    color="blue"
+                    tag="link"
+                    :href="route('widgets.create')"
+                >Create
+                </BaseButton>
             </div>
-
-            <hr class="my-12">
-
-            <form @submit.prevent="handleSubmit" method="post">
-                <FormGroup
-                    label="Quantity"
-                    name="quantity"
-                    required
-                    single-column
-                >
-                    <input v-model="form.quantity" type="text" id="quantity" name="quantity" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                </FormGroup>
-
-
-                <div class="flex flex-row items-center">
-                    <input
-                        v-model="form.optimize"
-                        type="checkbox"
-                        class="rounded bg-white border-gray-300 text-gray-700 shadow focus:ring-0 mr-3"
-                        id="form_optimize"
-                        name="form_optimize"
-                    >
-                    <label for="form_optimize">
-                        Optimize
-                    </label>
-                </div>
-                <div class="flex flex-row pt-5">
-                    <button type="submit" class="text-white bg-green-500 hover:bg-green-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-12 py-2.5 ml-2 mb-2 focus:outline-none">Purchase</button>
-                </div>
-            </form>
-
-            <template v-if="order">
-                <div class="mt-5">
-                    <h3>Order:</h3>
-                    <div class="flex flex-row mt-2">
-                        <template v-for="(item, index) in order">
-                            <div class="bg-gray-200 px-2 py-1 rounded-lg mr-1">
-                                {{ index }}: {{ item }}
-                            </div>
-                        </template>
-                    </div>
-                </div>
-            </template>
         </div>
     </GuestLayout>
 </template>
@@ -84,8 +27,8 @@
 <script setup lang="ts">
 import {useForm} from "@inertiajs/vue3";
 import {ref} from "vue";
-import FormGroup from "@/Components/Form/FormGroup.vue";
 import GuestLayout from "@/Layouts/GuestLayout.vue";
+import BaseButton from "@/Components/Buttons/BaseButton.vue";
 
 interface Widget {
     id: string,
@@ -93,7 +36,7 @@ interface Widget {
 }
 
 const props = defineProps<{
-    widgets?: Array<Widget>
+    widgets: Array<Widget>
 }>();
 
 const form = useForm<{

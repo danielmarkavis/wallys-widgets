@@ -1,22 +1,12 @@
 <?php
 
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PackingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WidgetController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return redirect()->route('widgets.index');
@@ -24,10 +14,13 @@ Route::get('/', function () {
 
 Route::middleware('web')->group(function () {
     Route::resource('widgets', WidgetController::class)
-        ->parameters(['widgets' => 'widget:id'])->only(['index','store']);
+        ->parameters(['widgets' => 'widget'])->except(['show']);
+
+    Route::resource('packing', PackingController::class)
+        ->only(['index','store']);
 
     Route::resource('orders', OrderController::class)
-        ->parameters(['orders' => 'order:id'])->only(['index','show']);
+        ->parameters(['orders' => 'order'])->only(['index','show']);
 });
 
 Route::get('/dashboard', function () {

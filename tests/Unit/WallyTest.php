@@ -22,7 +22,7 @@ class WallyTest extends TestCase
         $this->seed(WidgetSeeder::class);
         $this->widgetService = app(WidgetService::class);
         $repository = app(WidgetRepository::class);
-        $this->packs = collect($repository->getQuery()->orderby('size', 'desc')->get()->toArray())->pluck('size')->toArray();
+        $this->packs = collect($repository->getQuery()->orderby('size', 'desc')->get())->pluck('size')->toArray();
     }
 
     /**

@@ -4,14 +4,14 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateWidgetRequest extends FormRequest
+class PackingWidgetRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class UpdateWidgetRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'quantity' => 'required|int|min:1',
+            'optimize' => 'bool',
         ];
     }
 }

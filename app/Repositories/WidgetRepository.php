@@ -12,6 +12,7 @@ class WidgetRepository implements ProviderInterface
     public function getQuery(): Builder|QueryBuilder|Relation
     {
         return Widget::select([
+            'widgets.id',
             'widgets.size',
         ]);
     }
